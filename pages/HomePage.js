@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react'
 import {View,Text,StyleSheet,Dimensions, TouchableOpacity, Platform,ScrollView, TextInput} from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon1 from 'react-native-vector-icons/MaterialIcons';
+import Icon2 from 'react-native-vector-icons/Ionicons';
+import Icon3 from 'react-native-vector-icons/FontAwesome';
+import Icon4 from 'react-native-vector-icons/Entypo';
+
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
-import Svg,{Path} from 'react-native-svg';
+
 const HomePage = () => {
   const [name,setName]=useState('')
   const [phone,setPhone]=useState('')
@@ -77,14 +81,14 @@ const HomePage = () => {
       name:"raju",
       phone:"5456886643",
       message:"Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-      date:"13/08/2025"
+      date:"18/08/2025"
     },
   ])
   const [date,setDate]=useState(new Date())
   const [showIn,setShowIn]=useState('none');
   const {width,height}=Dimensions.get("window");
   const [dis,setDis]=useState(false)
-  const [mev,setMev]=useState(0)
+  const [mev,setMev]=useState({in:0,vi:false})
 
  
   const addData=()=>{
@@ -153,22 +157,39 @@ const HomePage = () => {
           </View>
         </View>
 
-        <Text style={{fontSize:30,fontWeight:'bold',textAlign:'center',color:'white',}}>RemindX</Text>
+        <Text style={{fontSize:30,fontWeight:'bold',textAlign:'center',color:'white',marginTop:20}}>RemindX</Text>
         <View style={{position:"absolute",width:width,bottom:0,backgroundColor:"rgba(255, 255, 255, 1)",boxShadow:"1px 1px 10px rgba(152, 161, 204, 1) ",height:height*0.8,borderTopRightRadius:width*0.1,borderTopLeftRadius:width*0.1,transform:[{translateY:0}],padding:10}}>
           <Text style={{textAlign:'center',fontWeight:'bold',fontSize:25,color:'rgba(167, 14, 244, 1)'}}>Today Reminder</Text>
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom:50}} style={{padding:10,marginBottom:20}}>
               {data.filter(a=>a.date===new Date().toLocaleDateString("en-GB")).map((a,index)=>{
                 return(
-                  <TouchableOpacity key={index} onPress={()=>{setMev(a.id)}}>
+                  <TouchableOpacity key={index} onPress={()=>{setMev({...mev,in:a.id,vi:!mev.vi})}}>
                     <View  style={{backgroundColor:"white",borderRadius:10,padding:10,boxShadow:"1px 1px 10px rgba(140, 140, 140, 0.67)",marginBottom:20}}>
                       <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                        <Text style={{fontWeight:'500',fontSize:25,textTransform:'capitalize'}}>{a.name}</Text>
-                        <Text style={{color:'rgba(89, 88, 88, 1)',fontWeight:'500'}}>{a.date}</Text>
+                        <View style={{flexDirection:"row",alignItems:"center"}}>
+                            <Icon2 style={{marginRight:10}} name='person' size={25} color="rgba(167, 14, 244, 1)"/>
+                            <Text style={{fontWeight:'500',fontSize:25,textTransform:'capitalize'}}>{a.name}</Text>
+                        </View>
+                        <View style={{flexDirection:"row",alignItems:"center"}}>
+                            <Icon4 style={{marginRight:5}} name='calendar' size={16} color="rgba(167, 14, 244, 1)"/>
+                            <Text style={{color:'rgba(89, 88, 88, 1)',fontWeight:'500'}}>{a.date}</Text>  
+                        </View>
+                        
                       </View>
-                      <Text style={{color:'rgba(89, 88, 88, 1)',fontWeight:'bold',fontSize:18,marginTop:10}}>+91{a.phone}</Text>
-                      <Text style={{padding:10,display:mev===a.id?'flex':'none',borderRadius:10,borderWidth:2,borderColor:'white',fontSize:18,marginTop:10}}>
-                        {a.message}
-                      </Text>
+                      <View style={{marginTop:10,flexDirection:"row",alignItems:"center"}}>
+                        <Icon3 style={{marginRight:8}} name='phone' size={18} color="rgba(167, 14, 244, 1)"/>
+                        <Text style={{color:'rgba(89, 88, 88, 1)',fontWeight:'bold',fontSize:18,}}>+91{a.phone}</Text>
+                      </View>
+                      <View style={{display:(mev.in===a.id&&mev.vi)?'flex':'none',marginTop:10,borderTopWidth:1}}>
+                        <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center",marginBottom:5}}>
+                          <Icon1 style={{marginRight:5,marginTop:3}} name='message' size={20} color="rgba(167, 14, 244, 1)"/>
+                          <Text style={{fontSize:20,fontWeight:"bold"}}>Message</Text>
+                        </View>
+                        <Text style={{padding:10,fontWeight:"bold",borderRadius:10,backgroundColor:"rgba(167, 14, 244, 1)",color:"white",fontSize:18}}>
+                          {a.message}
+                        </Text>
+                      </View>
+
                     </View>
                   </TouchableOpacity>
                 )
